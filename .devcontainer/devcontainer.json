@@ -1,0 +1,26 @@
+{
+    "name": "photo-catalog-edits",
+    "image": "mcr.microsoft.com/devcontainers/base:noble",
+    // "postCreateCommand": "sudo apt-get update && sudo apt-get install -y graphviz",// install graphviz for AWS MCP Diagram server
+    //"postCreateCommand": "pipx install checkov",
+   
+    // Podman on recent WSL2 builds can fail to create/manage the container's cgroup
+    // (rootless Podman can't get a proper cgroup v2 delegation from WSL's lightweight VM),
+    // which surfaces as an OCI runtime error when starting the container. Disabling cgroup
+    // management avoids that failure; it's safe here since dev containers don't rely on
+    // Podman-enforced per-container resource limits.
+    "runArgs": [
+        "--cgroups=disabled"
+    ],
+    "mounts": [
+        // Example 1: Mount your entire host Home directory into the container
+        "source=${localEnv:HOME}${localEnv:USERPROFILE},target=/host-home,type=bind,consistency=cached",
+
+        // Maps the host Z: drive to /mnt/photos inside the container
+        "source=Z:\\,target=/workspaces/photos,type=bind,consistency=cached"
+    ],
+    "features": {
+        "ghcr.io/devcontainers/features/python:1": {}
+    }
+    
+}
